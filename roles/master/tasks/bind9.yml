@@ -1,0 +1,56 @@
+- name: Installation du paquet BIND
+  apt:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - bind9
+    - dnsutils
+    - bind9-doc
+    - resolvconf
+    - bind9utils
+    - apparmor-utils
+- name: Ajout du fichier named.conf
+  template: src=templates/named.conf.j2 dest=/etc/bind/named.conf
+
+- name: Ajout du fichier named.conf.options
+  template: src=templates/named.conf.options.j2 dest=/etc/bind/named.conf.options
+
+- name: Ajout du fichier named.conf.local
+  template: src=templates/named.conf.local.j2 dest=/etc/bind/named.conf.local
+
+- name: Ajout du fichier vlne.fw.zone
+  template: src=templates/vlne.fw.zone.j2 dest=/etc/bind/vlne.fw.zone  owner=bind group=bind
+
+- name: Ajout du fichier vlne.rev.zone
+  template: src=templates/vlne.rev.zone.j2 dest=/etc/bind/vlne.rev.zone  owner=bind group=bind
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: /etc/bind/vlne.fw.zone
+    owner: bind
+    group: bind
+    mode: '0664'
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: /etc/bind/vlne.fw.zone
+    owner: bind
+    group: bind
+    mode: '0664'
+
+- name: Rndc reload
+  shell: resolvconf -u
+
+- name: Restart bind
+  service:
+    name: bind9
+    state: restarted
+
+#- name: Rendons les fichiers lisibles
+#  template: src=templates/apparmor.j2 dest=/etc/apparmor.d/usr.sbin.named owner=root group=root
+
+- name: Restart bind
+  service:
+    name: bind9
+    state: restarted

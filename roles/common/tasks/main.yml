@@ -1,0 +1,45 @@
+- name: Ansible Update Cache
+  apt:
+    update_cache: yes
+  ignore_errors: true
+
+- name: Apt install package de base
+  register: updatesys
+  apt:
+    name:
+    - net-tools
+    - dnsutils
+    - vim
+    - htop
+    - ssh
+    - open-vm-tools
+    - resolvconf
+    - traceroute
+    state: present
+
+- name: Display the last line of the previous task to check the stats
+  debug:
+    msg: "{{updatesys.stdout_lines}}"
+  ignore_errors: true
+
+- name: Ajout du PermitRootLogin
+  command: sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+- name: Ajout du Challenge Response
+  command: sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+  notify:
+  - restart ssh
+#   resgiter: nameinterface
+#   command: "{{ item }}"
+#   with_items:
+#     - {{ iplink }}
+
+#- name: Display the name of the interface
+#  debug:
+#    msg:  "{{nameinterface.stdout_lines}}"
+
+- name: Configuration IP fixe
+  # - name: Récupération du nom de l'interface
+  template: src=templates/interfaces.j2 dest=/etc/network/interfaces
+
+- name: BASHRC config root
+  template: src=templates/bashrc.j2 dest=/root/.bashrc

@@ -1,0 +1,18 @@
+- name: Installation du paquet BIND
+  apt:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - isc-dhcp-server
+
+- name: Configure interface
+  lineinfile: dest=/etc/default/isc-dhcp-server regexp="INTERFACESv4=""" line="INTERFACESv4="eth0"" state=present
+
+- name: Ajout du fichier dhcpd.conf
+  template: src=templates/dhcpd.conf.j2 dest=/etc/dhcp/dhcpd.conf
+
+- name: Restart dhcp
+  service:
+    name: isc-dhcp-server
+    state: restarted

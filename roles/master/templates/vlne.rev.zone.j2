@@ -1,0 +1,33 @@
+; vlne.rev.zone
+; SERVEUR MAITRE
+; BIND reverse data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     bind9-pipeline.{{ domain }}. root.{{ domain }}. (
+                              5         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+; Serveurs DNS
+@       IN      NS      bind9-pipeline.{{ domain }}.
+@       IN      PTR     {{ domain }}.
+
+;Resolveur DNS
+
+bind9-pipeline IN      A       192.168.45.9
+
+; Machines dans le domaine
+9   IN      PTR     bind9-pipeline.{{ domain }}.          ; PTR du DNS primaire
+45   IN      PTR     p1jenkins-pipeline.{{ domain }}. 
+46   IN      PTR     srvdev-pipeline.{{ domain }}.  
+42   IN      PTR     srvstage-pipeline.{{ domain }}.
+43   IN      PTR     srvprod-pipeline.{{ domain }}.
+44   IN      PTR     srvbdd-pipeline.{{ domain }}.
+47   IN      PTR     srvregistry-pipeline.{{ domain }}.
+48   IN      PTR     gitlab-pipeline.{{ domain }}. 
+26   IN      PTR     master.{{ domain }}. 
+27  IN      PTR     worker-1.{{ domain }}. 
+28  IN      PTR     worker-2.{{ domain }}. 
+29  IN      PTR     worker-3.{{ domain }}. 
+

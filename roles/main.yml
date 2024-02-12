@@ -1,0 +1,5 @@
+- become: "yes"
+  hosts: masters
+  roles:
+  - role: master
+  tags: master

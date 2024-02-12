@@ -1,0 +1,10 @@
+- name: Include bind9 tasks
+  include_tasks: bind9.yml
+
+- name: Include DHCP tasks
+  include_tasks: dhcp.yml
+
+- name: Unconditionally reboot the machine with all defaults
+  ansible.builtin.reboot:
+    reboot_timeout: 60
+  ignore_errors: true

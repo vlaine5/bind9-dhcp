@@ -1,0 +1,29 @@
+; vlne.fw.zone
+; SERVEUR MAITRE
+; BIND reverse data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     bind9-pipeline.{{ domain }}. root.{{ domain }}. (
+                              5         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+; Serveurs DNS
+@       IN      NS      bind9-pipeline.{{ domain }}. ; Définition de nos serveurs DNS
+@       IN      A       192.168.45.9
+;Resolveur DNS
+bind9-pipeline IN      A       192.168.45.9
+
+; Machines dans le domaine
+p1jenkins-pipeline      A       192.168.45.45
+srvdev-pipeline      A        192.168.45.46
+srvstage-pipeline      A        192.168.45.42
+srvprod-pipeline      A        192.168.45.43
+srvbdd-pipeline      A        192.168.45.44
+srvregistry-pipeline      A             192.168.45.47          
+gitlab-pipeline      A        192.168.45.48
+master          A         192.168.45.26
+worker-1         A         192.168.45.27
+worker-2         A         192.168.45.28
+worker-3         A         192.168.45.29
